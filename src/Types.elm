@@ -196,6 +196,7 @@ type Condition
     | BehindInVps
     | MoreInfluenceInCountry { country : Country }
     | TensionIsAtLevels { tension : List Tension }
+    | ExactNumberOfFonopCr { number : Int }
 
 
 type PlacementType
@@ -213,7 +214,7 @@ type EventDirection
     | MoveDiplomaticInfluenceFromCountriesToAvailable { side : Side, amount : Amount, numberOfCountries : Int }
     | MoveEconomicInfluenceFromCountryToAvailable { amount : Amount, side : Side, country : Country }
     | PlacePoliticalWarfare { number : Int, side : Side }
-    | PlaceDiplomaticInfluence { side : Side, amount : Int, countries : List EventCountry }
+    | PlaceDiplomaticInfluence { side : Side, amount : Int, countries : List EventCountry, type_ : PlacementType }
     | PlaceEconomicInfluence { side : Side, amount : Int, countries : List EventCountry, type_ : PlacementType }
     | PlaceAndMoveCrFonop
         { side : Side
@@ -221,7 +222,7 @@ type EventDirection
         , place : FonopCrName
         , moveToAvailable : FonopCrName
         }
-    | MoveFonopCrToAvailable { side : Side, amount : Int, location : FonopCrName }
+    | MoveFonopCrToAvailable { side : Side, amount : Int, locations : List FonopCrName }
     | PlaceFonopCrAtLocation { side : Side, amount : Int, location : FonopCrName }
     | Conditional { side : Side, condition : Condition, ifTrue : List EventDirection }
     | ConditionalActiveSide { condition : Condition, ifTrue : List EventDirection }
@@ -231,6 +232,7 @@ type EventDirection
     | MoveInfluenceToAvailable { side : Side, country : Country, amount : Amount }
     | MoveAllFonopCrToAvailable { availableLocations : List FonopCrName }
     | MoveOneTypeOfInfluenceToReserve { side : Side, amount : Int }
+    | PlaceDiplomaticInfluenceFromReserveOrAvailable { side : Side, amount : Int }
 
 
 type alias ScoringCard =

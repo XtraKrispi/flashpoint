@@ -92,6 +92,7 @@ cards =
                 { side = China
                 , amount = 1
                 , countries = [ SpecificCountry Malaysia, OtherCountries 2 ]
+                , type_ = Each
                 }
             ]
       , cardNumber = 11
@@ -107,6 +108,7 @@ cards =
                 { side = China
                 , amount = 1
                 , countries = [ OtherCountries 2 ]
+                , type_ = Each
                 }
             ]
       , cardNumber = 12
@@ -134,7 +136,12 @@ cards =
       , tensionImpact = Nothing
       , scoringImpact = ScoreCountry Brunei
       , eventDirections =
-            [ PlaceDiplomaticInfluence { side = USA, amount = 1, countries = [ OtherCountries 3 ] }
+            [ PlaceDiplomaticInfluence
+                { side = USA
+                , amount = 1
+                , countries = [ OtherCountries 3 ]
+                , type_ = Each
+                }
             ]
       , cardNumber = 14
       }
@@ -183,6 +190,7 @@ cards =
                         { side = USA
                         , amount = 1
                         , countries = [ OtherCountries 3 ]
+                        , type_ = Each
                         }
                     ]
                 }
@@ -345,6 +353,7 @@ cards =
                 { side = China
                 , amount = 3
                 , countries = []
+                , type_ = Total
                 }
             ]
       , cardNumber = 26
@@ -428,6 +437,7 @@ cards =
                 { side = USA
                 , amount = 2
                 , countries = []
+                , type_ = Total
                 }
             , Conditional
                 { side = USA
@@ -493,7 +503,7 @@ cards =
                     [ MoveFonopCrToAvailable
                         { side = USA
                         , amount = 1
-                        , location = ScarboroughShoal
+                        , locations = [ ScarboroughShoal ]
                         }
                     , MoveInfluenceToAvailable
                         { side = USA
@@ -540,5 +550,189 @@ cards =
                 }
             ]
       , cardNumber = 30
+      }
+    , { operationValue = 3
+      , mode = Trade
+      , title = "Nationalist Protests Erupt in Major Cities, Universities"
+      , side = Just USA
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCountry Brunei
+      , eventDirections =
+            [ ConditionalActiveSide
+                { condition = TensionIsAtLevels { tension = [ High, Critical ] }
+                , ifTrue =
+                    [ PlaceEconomicInfluence
+                        { side = USA
+                        , amount = 1
+                        , type_ = Total
+                        , countries = []
+                        }
+                    , PlaceDiplomaticInfluence
+                        { side = USA
+                        , amount = 3
+                        , type_ = Total
+                        , countries = []
+                        }
+                    ]
+                }
+            ]
+      , cardNumber = 31
+      }
+    , { operationValue = 3
+      , mode = Military
+      , title = "USS Carl Vinson Makes Historic Port Call in Vietnam"
+      , side = Just USA
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCountry Vietnam
+      , eventDirections =
+            [ Conditional
+                { side = USA
+                , condition = MoreInfluenceInCountry { country = Vietnam }
+                , ifTrue =
+                    [ PlaceInfluence
+                        { side = USA
+                        , amount = 2
+                        , countries = [ SpecificCountry Vietnam ]
+                        , type_ = Total
+                        }
+                    , PlaceFonopCrAtLocation
+                        { side = USA
+                        , amount = 1
+                        , location = ParacelIslands
+                        }
+                    ]
+                }
+            ]
+      , cardNumber = 32
+      }
+    , { operationValue = 3
+      , mode = Military
+      , title = "US Companies Fear Chinese Reprisals Over Support for Hong Kong Protests"
+      , side = Just China
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreEconomics
+      , eventDirections =
+            [ MoveDiplomaticInfluenceToAvailable
+                { side = USA
+                , amount = Specific 3
+                }
+            ]
+      , cardNumber = 33
+      }
+    , { operationValue = 3
+      , mode = Military
+      , title = "U.S. Accuses China of Major Human Rights Violations"
+      , side = Just USA
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCrFonop
+      , eventDirections =
+            [ MoveDiplomaticInfluenceToAvailable
+                { side = China
+                , amount = Specific 1
+                }
+            , PlaceDiplomaticInfluence
+                { side = USA
+                , countries = []
+                , amount = 2
+                , type_ = Total
+                }
+            ]
+      , cardNumber = 34
+      }
+    , { operationValue = 3
+      , mode = Territorial
+      , title = "Protests by Chinese Veterans Over Pensions Distract Beijing"
+      , side = Just USA
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCountry Philippines
+      , eventDirections =
+            [ Conditional
+                { side = USA
+                , condition = MoreThanDiplomaticInfluenceInTotal { amount = 7 }
+                , ifTrue =
+                    [ PlaceInfluence
+                        { side = USA
+                        , amount = 3
+                        , type_ = Total
+                        , countries = []
+                        }
+                    , MoveEconomicInfluenceToAvailable
+                        { side = China
+                        , amount = Specific 1
+                        }
+                    ]
+                }
+            ]
+      , cardNumber = 35
+      }
+    , { operationValue = 3
+      , mode = Territorial
+      , title = "China Seizes US Submarine Drone"
+      , side = Just China
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCountry Vietnam
+      , eventDirections =
+            [ MoveFonopCrToAvailable
+                { side = USA
+                , amount = 1
+                , locations = []
+                }
+            , PlaceInfluence
+                { side = China
+                , amount = 1
+                , type_ = Each
+                , countries = [ OtherCountries 3 ]
+                }
+            ]
+      , cardNumber = 36
+      }
+    , { operationValue = 3
+      , mode = Trade
+      , title = "US and Chinese Planes Collide"
+      , side = Just China
+      , tensionImpact = Just (SpecificTension Critical)
+      , scoringImpact = ScoreCountry Indonesia
+      , eventDirections =
+            [ MoveDiplomaticInfluenceToAvailable
+                { side = USA
+                , amount = Specific 3
+                }
+            ]
+      , cardNumber = 42
+      }
+    , { operationValue = 3
+      , mode = Military
+      , title = "Chinese Declare ADIZ"
+      , side = Just China
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCrFonop
+      , eventDirections =
+            [ MoveDiplomaticInfluenceFromCountriesToAvailable
+                { side = USA
+                , amount = Specific 1
+                , numberOfCountries = 3
+                }
+            ]
+      , cardNumber = 47
+      }
+    , { operationValue = 3
+      , mode = Military
+      , title = "US Announces Formal Review of Taiwan Relations Act"
+      , side = Just USA
+      , tensionImpact = Nothing
+      , scoringImpact = ScoreCountry Brunei
+      , eventDirections =
+            [ Conditional
+                { side = USA
+                , condition = ExactNumberOfFonopCr { number = 3 }
+                , ifTrue =
+                    [ PlaceDiplomaticInfluenceFromReserveOrAvailable
+                        { side = USA
+                        , amount = 3
+                        }
+                    ]
+                }
+            ]
+      , cardNumber = 48
       }
     ]
