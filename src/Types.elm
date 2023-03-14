@@ -73,6 +73,11 @@ type Side
     | USA
 
 
+type Forces
+    = USAForces SideForces
+    | ChinaForces SideForces
+
+
 type alias SideForces =
     { available : Int
     , reserve : Int
@@ -126,14 +131,19 @@ type Country
     | Indonesia
 
 
+type Facing
+    = FaceUp
+    | FaceDown
+
+
 type alias GameState =
     { tension : Tension
     , campaign : Campaign
-    , usForces : SideForces
-    , chinaForces : SideForces
+    , usForces : Forces
+    , chinaForces : Forces
     , victoryPointTrack : Int
     , eventCardDeck : List EventCard
-    , scoringCards : List ScoringCard
+    , scoringCards : List ( Facing, ScoringCard )
     , soloCards : List SoloCard
     , vietnam : FonopLocation
     , philippines : FonopLocation
@@ -142,6 +152,7 @@ type alias GameState =
     , indonesia : Location
     , turn : Side
     , playerSide : Side
+    , playerCards : List EventCard
     }
 
 

@@ -6,7 +6,7 @@ import Cards.SoloCards as SoloCards
 import Helpers exposing (opposite)
 import Random
 import Random.List as RL
-import Types exposing (Campaign(..), Country(..), Difficulty(..), EventCard, FonopCrName(..), FonopLocation, GameState, Location, PoliticalWarfare(..), ScoringCard, Side(..), SoloCard, Tension(..))
+import Types exposing (Campaign(..), Country(..), Difficulty(..), EventCard, Facing(..), FonopCrName(..), FonopLocation, Forces(..), GameState, Location, PoliticalWarfare(..), ScoringCard, Side(..), SoloCard, Tension(..))
 
 
 initGameCmd : Difficulty -> Side -> (GameState -> msg) -> Cmd msg
@@ -78,12 +78,12 @@ initGame difficulty side eventCards scoringCards soloCards =
     { tension = Low
     , campaign = FirstCampaign
     , usForces =
-        usForces
+        USAForces usForces
     , chinaForces =
-        chinaForces
+        ChinaForces chinaForces
     , victoryPointTrack = victoryPoints
     , eventCardDeck = eventCards
-    , scoringCards = scoringCards
+    , scoringCards = List.map (\c -> ( FaceUp, c )) scoringCards
     , soloCards = soloCards
     , vietnam = vietnam
     , philippines = philippines
@@ -92,6 +92,7 @@ initGame difficulty side eventCards scoringCards soloCards =
     , indonesia = indonesia
     , turn = opposite side
     , playerSide = side
+    , playerCards = []
     }
 
 

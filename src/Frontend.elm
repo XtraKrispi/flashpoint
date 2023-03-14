@@ -2,6 +2,7 @@ module Frontend exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
+import Cards.Helpers
 import Dict exposing (diff)
 import Html
 import Html.Attributes as Attr
@@ -10,6 +11,10 @@ import Lamdera
 import Setup
 import Types exposing (..)
 import Url
+import Views.CampaignTrack
+import Views.Forces
+import Views.Location
+import Views.TensionTrack
 
 
 type alias Model =
@@ -75,7 +80,7 @@ updateFromBackend msg model =
 setupView : Difficulty -> Html.Html FrontendMsg
 setupView difficulty =
     Html.div [ Attr.class "h-screen flex justify-center items-center flex-col" ]
-        [ Html.div [] [ Html.text "Flashpoint: South China Sea" ]
+        [ Html.div [] [ Html.img [ Attr.class "w-48", Attr.alt "Flashpoint: South China Sea", Attr.src "/box-art.webp" ] [] ]
         , Html.div [ Attr.class "flex justify-center flex-col items-center" ]
             [ Html.div [] [ Html.text "Please choose your difficulty" ]
             , difficultySelector difficulty
@@ -127,7 +132,8 @@ difficultySelector difficulty =
                     []
                 , Html.label
                     [ Attr.for (toString diff)
-                    , Attr.class "block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white peer-hover:bg-blue-200 peer-hover:font-bold peer-hover:text-white uppercase"
+                    , Attr.class "block cursor-pointer select-none rounded-xl p-2 text-center peer-checked:bg-blue-500 peer-checked:font-bold peer-checked:text-white uppercase"
+                    , Attr.classList [ ( "peer-hover:bg-blue-200 peer-hover:font-bold peer-hover:text-white", difficulty /= diff ) ]
                     ]
                     [ Html.text (toString diff) ]
                 ]
@@ -149,7 +155,17 @@ view model =
                 setupView difficulty
 
             Playing gameState ->
-                Html.div [] []
+                Html.div [ Attr.class "flex flex-col space-y-2" ]
+                    [ Views.Location.viewWithFonopCr gameState.vietnam
+                    , Views.Location.viewWithFonopCr gameState.philippines
+                    , Views.Location.viewWithFonopCr gameState.malaysia
+                    , Views.Location.view gameState.brunei
+                    , Views.Location.view gameState.indonesia
+                    , Views.TensionTrack.view gameState.tension
+                    , Views.CampaignTrack.view gameState.campaign
+                    , Views.Forces.view gameState.usForces
+                    , Views.Forces.view gameState.chinaForces
+                    ]
 
             GameOver ->
                 Html.div [] []
