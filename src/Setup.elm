@@ -58,7 +58,7 @@ initGame difficulty side eventCards scoringCards soloCards =
                       , reserve = 2
                       , politicalWarfare = Empty
                       }
-                    , { available = 6
+                    , { available = 60
                       , reserve = 0
                       , politicalWarfare = Empty
                       }

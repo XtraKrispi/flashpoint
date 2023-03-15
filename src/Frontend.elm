@@ -15,6 +15,7 @@ import Views.CampaignTrack
 import Views.Forces
 import Views.Location
 import Views.TensionTrack
+import Views.VictoryPointTrack
 
 
 type alias Model =
@@ -165,6 +166,7 @@ view model =
                     , Views.CampaignTrack.view gameState.campaign
                     , Views.Forces.view gameState.usForces
                     , Views.Forces.view gameState.chinaForces
+                    , Views.VictoryPointTrack.view gameState.victoryPointTrack
                     ]
 
             GameOver ->
