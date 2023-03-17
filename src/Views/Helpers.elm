@@ -27,3 +27,8 @@ sideSpace s =
         , Attr.class "w-6 h-6 rounded-sm drop-shadow-sm"
         ]
         []
+
+
+cardSize : Html.Attribute msg
+cardSize =
+    Attr.class "h-[12rem] w-[10rem]"

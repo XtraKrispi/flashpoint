@@ -12,8 +12,11 @@ import Setup
 import Types exposing (..)
 import Url
 import Views.CampaignTrack
+import Views.EventCard
 import Views.Forces
 import Views.Location
+import Views.ScoringCard
+import Views.SoloCard
 import Views.TensionTrack
 import Views.VictoryPointTrack
 
@@ -157,17 +160,21 @@ view model =
 
             Playing gameState ->
                 Html.div [ Attr.class "flex flex-col space-y-2" ]
-                    [ Views.Location.viewWithFonopCr gameState.vietnam
-                    , Views.Location.viewWithFonopCr gameState.philippines
-                    , Views.Location.viewWithFonopCr gameState.malaysia
-                    , Views.Location.view gameState.brunei
-                    , Views.Location.view gameState.indonesia
-                    , Views.TensionTrack.view gameState.tension
-                    , Views.CampaignTrack.view gameState.campaign
-                    , Views.Forces.view gameState.usForces
-                    , Views.Forces.view gameState.chinaForces
-                    , Views.VictoryPointTrack.view gameState.victoryPointTrack
-                    ]
+                    ([ Views.Location.viewWithFonopCr gameState.vietnam
+                     , Views.Location.viewWithFonopCr gameState.philippines
+                     , Views.Location.viewWithFonopCr gameState.malaysia
+                     , Views.Location.view gameState.brunei
+                     , Views.Location.view gameState.indonesia
+                     , Views.TensionTrack.view gameState.tension
+                     , Views.CampaignTrack.view gameState.campaign
+                     , Views.Forces.view gameState.usForces
+                     , Views.Forces.view gameState.chinaForces
+                     , Views.VictoryPointTrack.view gameState.victoryPointTrack
+                     ]
+                        ++ List.map Views.ScoringCard.view gameState.scoringCards
+                        ++ List.map Views.EventCard.view gameState.eventCardDeck
+                        ++ List.map Views.SoloCard.view gameState.soloCards
+                    )
 
             GameOver ->
                 Html.div [] []
