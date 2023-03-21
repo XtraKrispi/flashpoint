@@ -16,7 +16,6 @@ import Views.EventCard
 import Views.Forces
 import Views.Location
 import Views.ScoringCard
-import Views.SoloCard
 import Views.TensionTrack
 import Views.VictoryPointTrack
 
@@ -172,8 +171,10 @@ view model =
                      , Views.VictoryPointTrack.view gameState.victoryPointTrack
                      ]
                         ++ List.map Views.ScoringCard.view gameState.scoringCards
-                        ++ List.map Views.EventCard.view gameState.eventCardDeck
-                        ++ List.map Views.SoloCard.view gameState.soloCards
+                        ++ (gameState.eventCardDeck
+                                |> List.sortBy .cardNumber
+                                |> List.map Views.EventCard.view
+                           )
                     )
 
             GameOver ->

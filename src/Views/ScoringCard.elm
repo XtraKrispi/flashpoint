@@ -41,22 +41,9 @@ view ( facing, card ) =
                     ]
                     [ icon ]
                 ]
-            , Html.div [] [ cardText card.scoringImpact ]
+            , Html.div [ Attr.class "text-xs px-2 text-center" ] [ Html.text card.description ]
             , Html.div [ Attr.class "text-[0.5rem]" ]
                 [ Html.text (String.fromInt card.cardNumber)
                 ]
             ]
         ]
-
-
-cardText : ScoringImpact -> Html msg
-cardText si =
-    case si of
-        ScoreCountry country ->
-            Html.div [] [ Html.text "Score country" ]
-
-        ScoreCrFonop ->
-            Html.div [] [ Html.text "Score CR Fonop" ]
-
-        ScoreEconomics ->
-            Html.div [] [ Html.text "Score Economics" ]

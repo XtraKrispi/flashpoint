@@ -28,7 +28,7 @@ countryCard country =
     , description =
         "Compare all cubes in "
             ++ name
-            ++ Maybe.withDefault "" (Maybe.map (\s -> "and " ++ s) fonop)
+            ++ Maybe.withDefault "" (Maybe.map (\s -> " and " ++ s) fonop)
             ++ ". The side with a positive differential scores it as VPs, not exceeding "
             ++ String.fromInt vp
             ++ Maybe.withDefault ". The scoring side moves 1 cube from Reserve to Available." (Maybe.map (always "") fonop)
