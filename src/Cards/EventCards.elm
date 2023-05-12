@@ -22,7 +22,7 @@ oneOpCard mode title scoring cardNumber =
 cards : List EventCard
 cards =
     [ oneOpCard Trade
-        "Chairman of Industrial/Commercial Bank of China (Jiang Jianqing)"
+        "Chairman of Industrial / Commercial Bank of China (Jiang Jianqing)"
         ScoreEconomics
         39
     , oneOpCard Trade

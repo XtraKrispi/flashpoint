@@ -31,4 +31,4 @@ sideSpace s =
 
 cardSize : Html.Attribute msg
 cardSize =
-    Attr.class "h-[15rem] w-[11rem]"
+    Attr.class "h-[16rem] w-[13rem]"
