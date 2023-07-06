@@ -26,7 +26,7 @@ view ( facing, card ) =
         [ cardSize
         , Attr.class "border-2 rounded-xl flex "
         ]
-        [ Html.div [ Attr.class "bg-green-600 w-[30%] uppercase relative rounded-l-xl" ]
+        [ Html.div [ Attr.class "bg-green-600 flex-grow-0 flex-shrink-0 basis-16 uppercase relative rounded-l-xl" ]
             [ Html.div [ Attr.class "rotate-[270deg] bottom-0 left-0 absolute ml-[0.25rem]", Attr.style "transform-origin" "0 0" ]
                 [ Html.span [ Attr.class "mr-1 text-white" ] [ Html.text "Score" ]
                 , Html.span [ Attr.class "text-gray-300" ]

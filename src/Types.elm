@@ -174,10 +174,16 @@ type ScoringImpact
     | ScoreCrFonop
 
 
+type EventCardDescriptionLine
+    = TensionChanges String
+    | NormalDescription String
+
+
 type alias EventCard =
     { operationValue : Int
     , mode : Mode
     , title : String
+    , descriptionLines : List EventCardDescriptionLine
     , side : Maybe Side
     , tensionImpact : Maybe TensionImpact
     , scoringImpact : ScoringImpact
@@ -217,7 +223,7 @@ type PlacementType
 
 type EventDirection
     = MoveTensionToAnyLevel
-    | ExecuteAsOpCard { operationsValue : Int, description : String }
+    | ExecuteAsOpCard { operationsValue : Int }
     | MovePoliticalWarfareToAvailable { amount : Amount, side : Side }
     | MoveDiplomaticInfluenceToAvailable { amount : Amount, side : Side }
     | MoveEconomicInfluenceToAvailable { amount : Amount, side : Side }
