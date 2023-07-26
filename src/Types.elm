@@ -11,8 +11,13 @@ type alias FrontendModel =
     }
 
 
+type alias RemainingCubes =
+    Int
+
+
 type AppModel
     = Setup Difficulty
+    | PostSetupPlayerCubes RemainingCubes GameState
     | Playing GameState
     | GameOver
 
@@ -28,6 +33,8 @@ type FrontendMsg
     | ChooseSide Difficulty Side
     | ChangeDifficulty Difficulty
     | GameSetup GameState
+    | PlayerSetupCubePlaced GameState
+    | NoOpFrontendMsg
 
 
 type ToBackend

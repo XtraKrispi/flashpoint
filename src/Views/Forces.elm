@@ -37,9 +37,9 @@ view f =
                     ( China, fs )
     in
     Html.div []
-        [ Html.div [ Attr.class "flex justify-center items-center w-[45rem] py-1 border-2 border-black rounded-xl" ]
+        [ Html.div [ Attr.class "flex justify-center items-center w-[35rem] py-1 border-2 border-black rounded-xl" ]
             [ Html.div
-                [ Attr.class "w-[44.5rem] rounded-xl flex flex-col space-y-2 border-2 border-black"
+                [ Attr.class "w-[34.5rem] rounded-xl flex flex-col space-y-2 border-2 border-black"
                 , Attr.classList
                     [ ( "bg-blue-500", side == USA )
                     , ( "bg-red-500", side == China )

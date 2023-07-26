@@ -56,6 +56,9 @@ init _ key =
 update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
 update msg model =
     case msg of
+        NoOpFrontendMsg ->
+            ( model, Cmd.none )
+
         UrlClicked urlRequest ->
             case urlRequest of
                 Internal url ->
@@ -78,7 +81,24 @@ update msg model =
             ( { model | appModel = Setup difficulty }, Cmd.none )
 
         GameSetup gs ->
-            ( { model | appModel = Playing gs }, Cmd.none )
+            ( { model | appModel = PostSetupPlayerCubes 4 gs }, Cmd.none )
+
+        PlayerSetupCubePlaced gs ->
+            case model.appModel of
+                PostSetupPlayerCubes remaining _ ->
+                    ( { model
+                        | appModel =
+                            if remaining == 1 then
+                                Playing gs
+
+                            else
+                                PostSetupPlayerCubes (remaining - 1) gs
+                      }
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
@@ -163,6 +183,93 @@ handOfCards cards =
         |> Html.div [ Attr.class "flex justify-center" ]
 
 
+viewGameState : Bool -> GameState -> Html.Html FrontendMsg
+viewGameState placingCubes gameState =
+    Html.div [ Attr.class "w-screen" ]
+        [ Html.div [ Attr.class "flex flex-col items-center space-y-6" ]
+            [ Views.VictoryPointTrack.view gameState.victoryPointTrack
+            , Html.div [ Attr.class "flex space-x-6 max-w-full" ]
+                [ Html.div [ Attr.class "flex flex-col space-y-4" ]
+                    [ Views.Location.viewWithFonopCr
+                        (if placingCubes then
+                            Just
+                                (\loc ->
+                                    PlayerSetupCubePlaced { gameState | vietnam = loc }
+                                )
+
+                         else
+                            Nothing
+                        )
+                        gameState.playerSide
+                        gameState.vietnam
+                    , Views.Location.viewWithFonopCr
+                        (if placingCubes then
+                            Just
+                                (\loc ->
+                                    PlayerSetupCubePlaced { gameState | philippines = loc }
+                                )
+
+                         else
+                            Nothing
+                        )
+                        gameState.playerSide
+                        gameState.philippines
+                    , Views.Location.viewWithFonopCr
+                        (if placingCubes then
+                            Just
+                                (\loc ->
+                                    PlayerSetupCubePlaced { gameState | malaysia = loc }
+                                )
+
+                         else
+                            Nothing
+                        )
+                        gameState.playerSide
+                        gameState.malaysia
+                    , Views.Location.view
+                        (if placingCubes then
+                            Just
+                                (\loc ->
+                                    PlayerSetupCubePlaced { gameState | brunei = loc }
+                                )
+
+                         else
+                            Nothing
+                        )
+                        gameState.playerSide
+                        gameState.brunei
+                    , Views.Location.view
+                        (if placingCubes then
+                            Just
+                                (\loc ->
+                                    PlayerSetupCubePlaced { gameState | indonesia = loc }
+                                )
+
+                         else
+                            Nothing
+                        )
+                        gameState.playerSide
+                        gameState.indonesia
+                    ]
+                , Html.div [ Attr.class "flex flex-col space-y-4 items-center" ]
+                    [ gameState.scoringCards
+                        |> List.map Views.ScoringCard.view
+                        |> Html.div [ Attr.class "flex flex-wrap" ]
+                    , Html.div [ Attr.class "flex justify-between w-full" ]
+                        [ Views.Forces.view gameState.usForces
+                        , Views.Forces.view gameState.chinaForces
+                        ]
+                    ]
+                ]
+            , Html.div [ Attr.class "flex space-x-6 justify-center" ]
+                [ Views.TensionTrack.view gameState.tension
+                , Views.CampaignTrack.view gameState.campaign
+                ]
+            , handOfCards gameState.playerCards
+            ]
+        ]
+
+
 view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
@@ -172,35 +279,15 @@ view model =
             Setup difficulty ->
                 setupView difficulty
 
-            Playing gameState ->
+            PostSetupPlayerCubes remaining gameState ->
                 Html.div []
-                    [ Html.div [ Attr.class "flex flex-col items-center space-y-6" ]
-                        [ Views.VictoryPointTrack.view gameState.victoryPointTrack
-                        , Html.div [ Attr.class "flex space-x-6" ]
-                            [ Html.div [ Attr.class "flex flex-col space-y-4" ]
-                                [ Views.Location.viewWithFonopCr gameState.vietnam
-                                , Views.Location.viewWithFonopCr gameState.philippines
-                                , Views.Location.viewWithFonopCr gameState.malaysia
-                                , Views.Location.view gameState.brunei
-                                , Views.Location.view gameState.indonesia
-                                ]
-                            , Html.div [ Attr.class "flex flex-col space-y-4 items-center" ]
-                                [ gameState.scoringCards
-                                    |> List.map Views.ScoringCard.view
-                                    |> Html.div [ Attr.class "flex" ]
-                                , Html.div [ Attr.class "flex justify-between w-full" ]
-                                    [ Views.Forces.view gameState.usForces
-                                    , Views.Forces.view gameState.chinaForces
-                                    ]
-                                ]
-                            ]
-                        , Html.div [ Attr.class "flex space-x-6 justify-center" ]
-                            [ Views.TensionTrack.view gameState.tension
-                            , Views.CampaignTrack.view gameState.campaign
-                            ]
-                        , handOfCards gameState.playerCards
-                        ]
+                    [ viewGameState True gameState
+                    , Html.div [ Attr.class "fixed bottom-0 right-0 left-0 text-center bg-white p-4" ]
+                        [ Html.text (String.fromInt remaining ++ " cubes left") ]
                     ]
+
+            Playing gameState ->
+                viewGameState False gameState
 
             GameOver ->
                 Html.div [] []
