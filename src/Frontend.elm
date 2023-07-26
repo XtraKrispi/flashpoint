@@ -2,7 +2,6 @@ module Frontend exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
-import Cards.Helpers
 import Dict exposing (diff)
 import Html
 import Html.Attributes as Attr
@@ -12,7 +11,7 @@ import Setup
 import Types exposing (..)
 import Url
 import Views.CampaignTrack
-import Views.EventCard
+import Views.EventCard as EventCard
 import Views.Forces
 import Views.Location
 import Views.ScoringCard
@@ -24,6 +23,15 @@ type alias Model =
     FrontendModel
 
 
+app :
+    { init : Lamdera.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
+    , view : Model -> Browser.Document FrontendMsg
+    , update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
+    , subscriptions : Model -> Sub FrontendMsg
+    , onUrlRequest : UrlRequest -> FrontendMsg
+    , onUrlChange : Url.Url -> FrontendMsg
+    }
 app =
     Lamdera.frontend
         { init = init
@@ -31,13 +39,13 @@ app =
         , onUrlChange = UrlChanged
         , update = update
         , updateFromBackend = updateFromBackend
-        , subscriptions = \m -> Sub.none
+        , subscriptions = \_ -> Sub.none
         , view = view
         }
 
 
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
-init url key =
+init _ key =
     ( { key = key
       , appModel = Setup Normal
       }
@@ -60,7 +68,7 @@ update msg model =
                     , Nav.load url
                     )
 
-        UrlChanged url ->
+        UrlChanged _ ->
             ( model, Cmd.none )
 
         ChooseSide difficulty side ->
@@ -148,6 +156,13 @@ difficultySelector difficulty =
         ]
 
 
+handOfCards : List EventCard -> Html.Html FrontendMsg
+handOfCards cards =
+    cards
+        |> List.map (\c -> Html.div [] [ EventCard.view c ])
+        |> Html.div [ Attr.class "flex justify-center" ]
+
+
 view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
@@ -158,24 +173,34 @@ view model =
                 setupView difficulty
 
             Playing gameState ->
-                Html.div [ Attr.class "flex flex-col space-y-2" ]
-                    ([ Views.Location.viewWithFonopCr gameState.vietnam
-                     , Views.Location.viewWithFonopCr gameState.philippines
-                     , Views.Location.viewWithFonopCr gameState.malaysia
-                     , Views.Location.view gameState.brunei
-                     , Views.Location.view gameState.indonesia
-                     , Views.TensionTrack.view gameState.tension
-                     , Views.CampaignTrack.view gameState.campaign
-                     , Views.Forces.view gameState.usForces
-                     , Views.Forces.view gameState.chinaForces
-                     , Views.VictoryPointTrack.view gameState.victoryPointTrack
-                     ]
-                        ++ List.map Views.ScoringCard.view gameState.scoringCards
-                        ++ (gameState.eventCardDeck
-                                |> List.sortBy .cardNumber
-                                |> List.map Views.EventCard.view
-                           )
-                    )
+                Html.div []
+                    [ Html.div [ Attr.class "flex flex-col items-center space-y-6" ]
+                        [ Views.VictoryPointTrack.view gameState.victoryPointTrack
+                        , Html.div [ Attr.class "flex space-x-6" ]
+                            [ Html.div [ Attr.class "flex flex-col space-y-4" ]
+                                [ Views.Location.viewWithFonopCr gameState.vietnam
+                                , Views.Location.viewWithFonopCr gameState.philippines
+                                , Views.Location.viewWithFonopCr gameState.malaysia
+                                , Views.Location.view gameState.brunei
+                                , Views.Location.view gameState.indonesia
+                                ]
+                            , Html.div [ Attr.class "flex flex-col space-y-4 items-center" ]
+                                [ gameState.scoringCards
+                                    |> List.map Views.ScoringCard.view
+                                    |> Html.div [ Attr.class "flex" ]
+                                , Html.div [ Attr.class "flex justify-between w-full" ]
+                                    [ Views.Forces.view gameState.usForces
+                                    , Views.Forces.view gameState.chinaForces
+                                    ]
+                                ]
+                            ]
+                        , Html.div [ Attr.class "flex space-x-6 justify-center" ]
+                            [ Views.TensionTrack.view gameState.tension
+                            , Views.CampaignTrack.view gameState.campaign
+                            ]
+                        , handOfCards gameState.playerCards
+                        ]
+                    ]
 
             GameOver ->
                 Html.div [] []

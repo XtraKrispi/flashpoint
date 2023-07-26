@@ -12,9 +12,6 @@ import Types exposing (Campaign(..), Country(..), Difficulty(..), EventCard, Fac
 initGameCmd : Difficulty -> Side -> (GameState -> msg) -> Cmd msg
 initGameCmd difficulty side msg =
     let
-        state =
-            initGame difficulty side [] [] []
-
         eventCardsGen =
             RL.shuffle EventCards.cards
 
@@ -82,7 +79,7 @@ initGame difficulty side eventCards scoringCards soloCards =
     , chinaForces =
         ChinaForces chinaForces
     , victoryPointTrack = victoryPoints
-    , eventCardDeck = eventCards
+    , eventCardDeck = List.drop 6 eventCards
     , scoringCards = List.map (\c -> ( FaceUp, c )) scoringCards
     , soloCards = soloCards
     , vietnam = vietnam
@@ -92,7 +89,7 @@ initGame difficulty side eventCards scoringCards soloCards =
     , indonesia = indonesia
     , turn = opposite side
     , playerSide = side
-    , playerCards = []
+    , playerCards = List.take 6 eventCards
     }
 
 

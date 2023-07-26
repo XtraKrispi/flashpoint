@@ -12,7 +12,7 @@ view : EventCard -> Html msg
 view card =
     Html.div
         [ cardSize
-        , Attr.class "border-2 rounded-xl flex "
+        , Attr.class "border-2 rounded-xl flex bg-white"
         ]
         [ Html.div
             [ Attr.class "flex-grow-0 flex-shrink-0 basis-16 rounded-tl-xl rounded-bl-xl flex flex-col justify-between"
